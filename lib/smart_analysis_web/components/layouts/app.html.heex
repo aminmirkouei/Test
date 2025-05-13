@@ -1,0 +1,26 @@
+<header class="px-4 sm:px-6 lg:px-8">
+  <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+    <div class="flex items-center gap-4">
+      <a href="/">
+        <img src={~p"/images/EONEST.png"} width="36" />
+      </a>
+      <p class="bg-brand/5 text-brand rounded-full px-2 font-medium leading-6">
+        EONEST
+      </p>
+    </div>
+  </div>
+</header>
+<main class="px-4 sm:px-6 lg:px-8">
+  <div class="text-center mt-4 mb-12">
+    <h1 class="text-xl font-semibold">
+      Work Smarter, Not Harder
+    </h1>
+    <h2 class="text-lg text-black">
+      AI-driven efficiency
+    </h2>
+  </div>
+  <div class="mx-auto max-w-2xl">
+    <.flash_group flash={@flash} />
+    {@inner_content}
+  </div>
+</main>

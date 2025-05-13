@@ -1,0 +1,97 @@
+<div class="max-w-md mx-auto">
+  <.header>
+    New Conversation
+    <:subtitle>
+      Create a new conversation in project: <span class="font-medium"><%= @project.title %></span>
+    </:subtitle>
+  </.header>
+
+  <.simple_form
+    :let={f}
+    for={@changeset}
+    id="conversation-form"
+    phx-change="validate"
+    phx-submit="save"
+  >
+    <.input field={f[:name]} type="text" label="Conversation Name" required />
+
+    <input type="hidden" name="conversation[project_id]" value={@project.id} />
+
+    <.input
+      field={f[:model]}
+      type="select"
+      label="AI Model"
+      options={Conversations.Conversation.model_options()}
+      required
+    />
+
+    <div class="space-y-4">
+      <.input
+        field={f[:temperature]}
+        type="range"
+        label="Temperature"
+        min="0"
+        max="2"
+        step="0.1"
+        value={@changeset.data.temperature || 1.0}
+        phx-update="ignore"
+      />
+      <div class="text-sm text-gray-500 -mt-3">
+        <span class="float-left">More Deterministic (0)</span>
+        <span class="float-right">More Creative (2)</span>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+
+    <div class="space-y-4">
+      <.input
+        field={f[:frequency_penalty]}
+        type="range"
+        label="Frequency Penalty"
+        min="0"
+        max="2"
+        step="0.1"
+        value={@changeset.data.frequency_penalty || 0.0}
+        phx-update="ignore"
+      />
+      <div class="text-sm text-gray-500 -mt-3">
+        <span class="float-left">More Repetitive (0)</span>
+        <span class="float-right">More Diverse (2)</span>
+        <div class="clear-both"></div>
+      </div>
+    </div>
+
+    <div class="mt-6 flex items-center justify-between gap-4">
+      <.link navigate={~p"/projects/#{@project.id}"} class="text-sm font-semibold">
+        Cancel
+      </.link>
+      <.button phx-disable-with="Creating...">Create Conversation</.button>
+    </div>
+  </.simple_form>
+</div>
+
+<script>
+  // This script updates the displayed value when the range sliders change
+  document.addEventListener('DOMContentLoaded', () => {
+    const rangeInputs = document.querySelectorAll('input[type="range"]');
+
+    rangeInputs.forEach(input => {
+      // Create label to display the value if it doesn't exist
+      let valueDisplay = document.getElementById(`${input.id}-value`);
+      if (!valueDisplay) {
+        valueDisplay = document.createElement('span');
+        valueDisplay.id = `${input.id}-value`;
+        valueDisplay.className = 'text-sm font-medium ml-2';
+        input.parentNode.insertBefore(valueDisplay, input.nextSibling);
+      }
+
+      // Update the label with the current value
+      valueDisplay.textContent = input.value;
+
+      // Add event listener to update the label when the slider changes
+      input.addEventListener('input', () => {
+        valueDisplay.textContent = input.value;
+      });
+    });
+  });
+</script>
